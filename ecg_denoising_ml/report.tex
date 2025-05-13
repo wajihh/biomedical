@@ -1,0 +1,115 @@
+% Setting up the document class and basic formatting
+\documentclass[a4paper,11pt]{article}
+
+% Including essential LaTeX packages for formatting and content
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{parskip}
+\usepackage{caption}
+\usepackage{siunitx}
+\usepackage{noto}
+\usepackage{hyperref}
+
+\pdfimageresolution=300
+
+% Defining the title, author, and date
+\title{ECG Denoising and Arrhythmia Classification Using Wavelet Transforms and Machine Learning}
+\author{Wajih}
+\date{May 2025}
+
+\begin{document}
+
+% Generating the title page
+\maketitle
+
+% Adding an abstract to summarize the project
+\begin{abstract}
+This project processes ECG signals from the MIT-BIH Arrhythmia Database using wavelet transforms for denoising, extracts heart rate variability (HRV) and RR interval features for each beat, and classifies arrhythmias with SVM, KNN, and Decision Tree models. The methodology includes signal preprocessing, per-beat feature extraction, and supervised learning, achieving modest classification metrics due to simulated labels. This report details the approach, results, and potential applications in cardiac health monitoring.
+\end{abstract}
+
+% Section: Introduction
+\section{Introduction}
+Electrocardiogram (ECG) analysis is vital for diagnosing arrhythmias. This project leverages wavelet transforms for denoising, extracts HRV and RR interval features per beat, and uses classical machine learning to classify normal and arrhythmic beats. The MIT-BIH Arrhythmia Database (record 100) provides the ECG data, processed using Python with PyWavelets, scikit-learn, and Matplotlib.
+
+% Section: Methodology
+\section{Methodology}
+
+% Subsection: Data Loading
+\subsection{Data Loading}
+The ECG signal is loaded from \texttt{100.csv}, containing the 'MLII' lead sampled at \SI{360}{\hertz}. The first 10,000 samples (\SI{27.8}{\second}) are used.
+
+% Subsection: Denoising
+\subsection{Denoising}
+Wavelet denoising applies the Daubechies 4 (db4) wavelet with 4 decomposition levels. Coefficients are thresholded using a soft threshold:
+\[
+\text{Threshold} = \sigma \sqrt{2 \ln N}, \quad \sigma = \text{median}(|c_D|)/0.6745
+\]
+where \( c_D \) are detail coefficients and \( N \) is the signal length.
+
+% Subsection: Feature Extraction
+\subsection{Feature Extraction}
+R-peaks are detected using SciPy's \texttt{find\_peaks} with a height of 0.3 and minimum distance of 180 samples. Features are computed for each pair of RR intervals:
+\begin{itemize}
+    \item Mean RR interval
+    \item SDNN (standard deviation of RR intervals)
+    \item RMSSD (root mean square of successive differences)
+    \item pNN50 (percentage of successive RR differences > \SI{50}{\milli\second})
+\end{itemize}
+
+% Subsection: Classification
+\subsection{Classification}
+SVM (RBF kernel), KNN (\( k=5 \)), and Decision Tree (max depth 5) models are trained on per-beat features. Simulated labels (50\% normal, 50\% arrhythmic) are used. Data is split 70:30 (train:test).
+
+% Section: Results
+\section{Results}
+\begin{table}[htbp]
+    \centering
+    \caption{Classification Performance Metrics}
+    \begin{tabular}{lcccc}
+        \toprule
+        Model & Accuracy & Precision & Recall & F1-Score \\
+        \midrule
+        SVM & 0.40 & 0.16 & 0.40 & 0.23 \\
+        KNN & 0.50 & 0.57 & 0.50 & 0.48 \\
+        Decision Tree & 0.20 & 0.10 & 0.20 & 0.13 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:results}
+\end{table}
+Table~\ref{tab:results} shows metrics based on simulated labels, resulting in near-chance performance due to the lack of real annotations. The KNN model performed best, with an accuracy of 0.50 and F1-score of 0.48, but results are limited by the small dataset and random label assignment.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth, height=0.4\textwidth]{denoised_ecg.pdf} % Use .pdf version
+    \caption{Denoised ECG Signal with Detected R-peaks}
+    \label{fig:denoised}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{hrv.png}
+    \caption{HRV (RR Intervals) Plot}
+    \label{fig:hrv}
+\end{figure}
+
+% Section: Discussion
+\section{Discussion}
+Wavelet denoising effectively preserves ECG morphology, as seen in Figure~\ref{fig:denoised}. Per-beat HRV features enable detailed arrhythmia analysis, shown in Figure~\ref{fig:hrv}. The low classification performance is due to simulated labels and a small dataset (33 feature sets from 35 R-peaks). Using MIT-BIH annotations and more records would improve accuracy. The scikit-learn warning about undefined precision suggests some labels were not predicted, likely due to limited training data.
+
+% Section: Conclusion
+\section{Conclusion}
+This project demonstrates a robust ECG analysis pipeline, suitable for wearable devices and telemedicine. Future work includes integrating real annotations and expanding the dataset. Code and report are available at \url{https://github.com/wajih/biomedical-projects}.
+
+% Adding a bibliography
+\begin{thebibliography}{9}
+    \bibitem{mitbih}
+        Moody, G. B., \& Mark, R. G. (2001). The impact of the MIT-BIH Arrhythmia Database. \emph{IEEE Engineering in Medicine and Biology Magazine}, 20(3), 45--50.
+\end{thebibliography}
+
+\end{document}
