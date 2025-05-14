@@ -1,25 +1,10 @@
-To reflect the change from `index.md` to `index.html` on GitHub, you need to rename the file in your local repository and push the changes to GitHub. Here's how you can do it:
-
-1. Rename the file locally:
-  ```bash
-  mv /home/wajih/projects/biomedical/blog/index.md /home/wajih/projects/biomedical/blog/index.html
-  ```
-
-2. Stage the renamed file:
-  ```bash
-  cd /home/wajih/projects/biomedical/blog
-  git add index.html
-  git rm index.md
-  ```
-
-3. Commit the changes:
-  ```bash
-  git commit -m "Renamed index.md to index.html"
-  ```
-
-4. Push the changes to GitHub:
-  ```bash
-  git push origin main
-  ```
-
-Make sure to replace `main` with your branch name if it's different.
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biomedical Projects Blog</title>
+</head>
+<body>
+    <h1>Welcome to the Biomedical Projects Blog</h1>
+    <p><a href="posts/2025-05-09-ecg-denoising-ml.html">ECG Denoising ML</a></p>
+</body>
+</html>
