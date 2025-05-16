@@ -1,5 +1,5 @@
 title: Biomedical Projects Blog
 description: A blog about ECG signal processing and other biomedical projects
-baseurl: "/biomedical-projects/blog"
+baseurl: "/biomedical/blog"
 url: "https://wajihh.github.io"
 theme: jekyll-theme-minimal
