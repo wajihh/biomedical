@@ -11,6 +11,6 @@
 # Biomedical Projects
 A collection of signal processing projects, including ECG denoising.
 
-[ECG Denoising Project](https://github.com/wajihh/biomedical/tree/main/ecg)
-[Blog](https://wajihh.github.io/biomedical-projects/blog)
+[Blog](https://wajihh.github.io/biomedical-projects/ecg/blog_post)
+
 [ECG Denoising Blog Post](https://wajihh.github.io/biomedical-projects/blog/2025/05/09/ecg-denoising-ml)
