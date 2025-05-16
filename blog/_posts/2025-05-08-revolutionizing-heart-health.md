@@ -9,4 +9,4 @@ In this project, we explore advanced techniques for processing and analyzing ECG
 
 The implementation, built with PyWavelets and scikit-learn, demonstrates robust performance on the MIT-BIH Arrhythmia Database, showcasing its potential for real-world applications in cardiac health monitoring.
 
-For a detailed overview of the methodology and results, visit the [GitHub repository](https://github.com/wajihh/biomedical-projects/tree/main/ecg_denoising_ml).
+For a detailed overview of the methodology and results, visit the [GitHub repository](https://github.com/wajihh/biomedical/tree/main/ecg_denoising_ml).
