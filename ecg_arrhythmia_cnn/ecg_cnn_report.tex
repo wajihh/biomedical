@@ -1,0 +1,128 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings} % For code snippets
+\usepackage{xcolor} % For code highlighting
+
+% Configuring packages for compatibility
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Adding comprehensive preamble
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{ECG Arrhythmia CNN Report}
+\fancyhead[R]{Wajih Humayun Hashmi, May 17, 2025}
+\fancyfoot[C]{\thepage}
+
+% Code listing setup
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!50!black},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt,
+    breaklines=true,
+    frame=single,
+    tabsize=4
+}
+
+% Font configuration at the end
+\usepackage{times}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    {\Huge ECG Arrhythmia CNN Report}\par
+    \vspace{0.5cm}
+    {\Large Wajih}\par
+    \vspace{0.5cm}
+    {\large May 17, 2025}\par
+    \vspace{2cm}
+\end{titlepage}
+
+\section*{Introduction}
+This report details the development of a Convolutional Neural Network (CNN) for ECG arrhythmia detection using the MIT-BIH Arrhythmia Database, achieving a balanced accuracy of ~0.88 on records 100, 101, and 203.
+
+\section{Methodology}
+
+\subsection{Data Collection and Preprocessing}
+Records 100, 101, and 203 were used, each with 40,000 samples, totaling 120,000 samples. The \texttt{ECGDataLoader} class handles loading and preprocessing:
+\begin{itemize}
+    \item \textbf{load\_ecg\_data}: Loads signals from CSV files and annotations from .atr files, concatenating signals and adjusting R-peak offsets.
+    \item \textbf{segment\_beats}: Segments signals into 256-sample windows around R-peaks, filtering out invalid segments and assigning binary labels (0 for normal, 1 for arrhythmic).
+    \item \textbf{preprocess\_data}: Normalizes segments to [0, 1] and reshapes for CNN input.
+\end{itemize}
+
+Here’s the core of \texttt{segment\_beats}:
+\begin{lstlisting}
+def segment_beats(self, signal, r_peaks, labels):
+    half_window = self.window_size // 2
+    segments = []
+    segment_labels = []
+    for i in range(len(r_peaks)):
+        r_peak = r_peaks[i]
+        start = r_peak - half_window
+        end = r_peak + half_window
+        if 0 <= start and end < len(signal):
+            segment = signal[start:end]
+            segments.append(segment)
+            segment_labels.append(1 if labels[i] == 'A' else 0)
+    return np.array(segments), np.array(segment_labels)
+\end{lstlisting}
+This method ensures segments align with labels, addressing earlier mismatches (e.g., 20 vs. 66 samples).
+
+\subsection{Model Architecture and Training}
+The \texttt{ECGCNNModel} class defines a CNN with convolutional layers, max-pooling, dropout, and dense layers, compiled with binary cross-entropy loss. The training process in \texttt{main.py} splits data into 70\% training, 15\% validation, and 15\% test sets, with stratification to maintain class balance:
+\begin{lstlisting}
+X_train, X_temp, y_train, y_temp = train_test_split(
+    segments, segment_labels, test_size=0.3, random_state=42, stratify=stratify
+)
+stratify_second = y_temp if all(count >= 2 for count in counts_temp) else None
+X_val, X_test, y_val, y_test = train_test_split(
+    X_temp, y_temp, test_size=0.5, random_state=42, stratify=stratify_second
+)
+\end{lstlisting}
+The dynamic stratification avoids errors when a class has fewer than 2 samples (e.g., only 1 arrhythmic beat in \texttt{y\_temp}).
+
+\subsection{Visualization}
+The \texttt{ECGPlotter} class plots ECG segments and confusion matrices, aiding in visual validation of model predictions.
+
+\section{Results}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lc}
+        \toprule
+        Metric & Value \\
+        \midrule
+        Accuracy & 0.97 \\
+        Precision & 0.88 \\
+        Recall & 1.00 \\
+        F1 Score & 0.94 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Final Model Performance}
+\end{table}
+Class distribution improved from 264:2 to 424:51 with record 203, enabling effective learning of arrhythmic patterns.
+
+\section{Challenges and Solutions}
+\begin{itemize}
+    \item \textbf{Imbalance}: Initially, only 2 arrhythmic beats were present; adding record 203 increased this to 51.
+    \item \textbf{Split Mismatch}: Resolved by adjusting stratification logic to use subset labels (\texttt{y\_temp}).
+    \item \textbf{Learning Minority Class}: The CNN learned arrhythmic patterns after increasing minority class samples.
+\end{itemize}
+
+\section{Conclusion and Future Work}
+The model achieved a balanced accuracy of ~0.88, exceeding the ~0.85 target. Future enhancements could include class weights, adding records 207 and 208, or deeper architectures.
+
+\end{document}
