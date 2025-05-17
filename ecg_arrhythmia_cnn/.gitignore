@@ -1,7 +1,14 @@
+# Virtual environment
 venv/
-*.pyc
-__pycache__/
-*.h5
-*.png
-*.pdf
+
+# LaTeX auxiliary files
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+
+# Model files
+model.h5
+
+# Data directory
 data/
