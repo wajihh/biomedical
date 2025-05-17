@@ -1,6 +1,6 @@
 # Biomedical Projects 
 
-  For blog post visit webpage   https://wajihh.github.io/biomedical/
+  Blog webpage   https://wajihh.github.io/biomedical/
   
   [ECG Signal Processing](ecg/blog_post.md)
   
