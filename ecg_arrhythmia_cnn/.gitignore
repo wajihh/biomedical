@@ -1,6 +1,9 @@
 # Virtual environment
 venv/
 
+# Piccture files
+*.png
+*.jpg
 # LaTeX auxiliary files
 *.aux
 *.fdb_latexmk
