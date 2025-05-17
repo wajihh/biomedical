@@ -3,7 +3,7 @@ This project implements a convolutional neural network (CNN) to classify ECG bea
 # Setup
 
 Clone the repository:
-git clone https://github.com/your-username/biomedical-projects.git
+git clone https://github.com/wajihh/biomedical.git
 cd biomedical-projects/ecg_arrhythmia_cnn
 
 
