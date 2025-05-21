@@ -8,6 +8,6 @@
 
   [ECG Analysis With CNN](blog/_posts/2025-05-17-ecg_arrhythmia_cnn.md)
 
-  [Case Study Stress and Sleeo ]()
+  [Case Study Stress and Sleep Detection ](stress_sleep_detection/case_study.md)
   
   [Summary of ECG Projects](blog/README.md)
