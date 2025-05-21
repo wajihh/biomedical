@@ -8,24 +8,26 @@ def main():
     # Initialize data loader
     loader = WESADDataLoader()
     
-    # Load data for subject S2
-    ecg, eda, resp, labels = loader.load_data(subject_id=2)
+    # Load data for subject S4
+    try:
+        ecg, eda, resp, labels = loader.load_data(subject_id=4)
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return
     
-    # Preprocess data into segments
-    segments = loader.preprocess(ecg, eda, resp)
-    
-    # Ensure labels match segment count
-    if len(labels) > segments.shape[0]:
-        labels = labels[:segments.shape[0]]
-    elif len(labels) < segments.shape[0]:
-        segments = segments[:len(labels)]
+    # Preprocess data into segments and get segment labels
+    segments, segment_labels = loader.preprocess(ecg, eda, resp, labels)
     
     # Convert labels to integer type for model compatibility
-    labels = labels.astype(int)
+    labels = segment_labels.astype(int)
     
     # Print class distribution to check balance
     unique, counts = np.unique(labels, return_counts=True)
     print(f"Label distribution: {dict(zip(unique, counts))}")
+    
+    # Check for single class and raise error if true
+    if len(unique) < 2:
+        raise ValueError(f"Only one class detected in labels: {unique}. Multi-class classification requires at least two classes.")
     
     # Split data into train, validation, and test sets with stratification
     X_train_val, X_test, y_train_val, y_test = train_test_split(
