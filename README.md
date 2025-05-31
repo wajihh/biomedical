@@ -1,8 +1,8 @@
 # Biomedical Projects 
 
-    ![AI set to Revolutionize the Diagnostic Cardiology Market](https://www.dicardiology.com/sites/default/files/styles/content_feed_large_new/public/field/image/GettyImages-1249601422.jpg?itok=VhIO4Ql_)
+![AI set to Revolutionize the Diagnostic Cardiology]Market(https://www.dicardiology.com/sites/default/files/styles/content_feed_large_new/public/field/image/GettyImages-1249601422.jpg?itok=VhIO4Ql_)
 
-  # [Blog webpage](https://wajihh.github.io/biomedical/)
+  # [My Blogs Webpage](https://wajihh.github.io/biomedical/)
   
   [ECG Signal Processing](ecg/blog_post.md)
   
